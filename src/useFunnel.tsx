@@ -1,11 +1,10 @@
-import React from "react";
-import {Funnel, Step} from "./Funnel";
+import { Funnel, Step } from "./Funnel";
 
 type FunnelComponent<T extends string[]> = {
     currentActivity: () => JSX.Element;
 }
 
-export const useFunnel = <T extends string[]> (
+export const useFunnel = <T extends string[]>(
     activities: T,
     options?: {
         initialActivity?: T[number];
@@ -13,24 +12,24 @@ export const useFunnel = <T extends string[]> (
         transitionDuration?: number;
     }
 ): [
-    FunnelComponent<T>,
-    (activity: T[number]) => void,
-    options?: {
-        initialActivity?: T[number];
-        onActivityChange?: (activity: T[number]) => void;
-        transitionDuration?: number;
-    }
-] => {
+        FunnelComponent<T>,
+        (activity: T[number]) => void,
+        options?: {
+            initialActivity?: T[number];
+            onActivityChange?: (activity: T[number]) => void;
+            transitionDuration?: number;
+        }
+    ] => {
 
-    const FunnelComponent = ({currentActivity}: {currentActivity: () => JSX.Element}) => {
+    const FunnelComponent = () => {
         const initial = options?.initialActivity ?? activities[0];
 
         return (
             <Funnel activities={activities} currentActivity={initial}>
                 {
-                    activities.map(activity => (
+                    activities.map((activity, index) => (
                         <Step name={activity} key={activity}>
-                            {currentActivity()}
+                            <p>{index}</p>
                         </Step>
                     ))
                 }

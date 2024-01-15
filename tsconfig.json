@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
     "target": "es6",
+    "baseUrl": "./",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "module": "ESNext",
     "declaration": true,
     "declarationDir": "./dist",
@@ -17,13 +18,15 @@
     "removeComments": true
   },
   "include": [
-    "./src"
+    "./src",
+    "**/*.tsx"
   ],
   "exclude": [
-    "./dist",
-    "./node_modules",
-    "./src/**/*.test.tsx",
-    "./src/**/*.stories.tsx",
+    "**/dist/*",
+    "**/esm/*",
+    "**/__testfixtures__/*"
   ],
-  "types": ["jest"]
+  "types": [
+    "jest"
+  ]
 }
