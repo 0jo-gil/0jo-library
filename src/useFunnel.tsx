@@ -12,15 +12,15 @@ export const useFunnel = <T extends string[]> (
         onActivityChange?: (activity: T[number]) => void;
         transitionDuration?: number;
     }
-): {
-    FunnelComponent: any;
-    onActivityChange: (activity: T[number]) => void;
+): [
+    FunnelComponent<T>,
+    (activity: T[number]) => void,
     options?: {
         initialActivity?: T[number];
         onActivityChange?: (activity: T[number]) => void;
         transitionDuration?: number;
     }
-} => {
+] => {
 
     const FunnelComponent = ({currentActivity}: {currentActivity: () => JSX.Element}) => {
         const initial = options?.initialActivity ?? activities[0];
@@ -42,18 +42,9 @@ export const useFunnel = <T extends string[]> (
         options?.onActivityChange?.(activity);
     }
 
-    return {
+    return [
         FunnelComponent,
         onActivityChange,
         options
-    }
+    ] as any;
 }
-// : {
-//     FunnelComponent<T>,
-//     (activity: T[number]) => void,
-//     options?: {
-//         initialActivity?: T[number];
-//         onActivityChange?: (activity: T[number]) => void;
-//         transitionDuration?: number;
-//     }
-// } 
