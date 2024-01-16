@@ -1,39 +1,65 @@
-import { IActivityProps, NonEmptyArray, Stack, Step } from "./Stack";
+import {Stack, StackElementType} from "./Stack";
+import {useEffect, useState} from "react";
 
-type StackProps<S extends NonEmptyArray<string>> = Omit<IActivityProps<S>, 'steps' | 'step'>;
-
-type StackComponent<S extends NonEmptyArray<string>> = ((props: StackProps<S>) => JSX.Element) & {
-    Step: (props: IActivityProps<S>) => JSX.Element;
+interface IUseStack {
+    elements: StackElementType[];
+    options?: {
+        initialRouteName?: string;
+        duration?: number;
+    }
 }
 
-export const useStack = <S extends NonEmptyArray<string>>(
-    activities: S,
-    options?: {
-        initialActivity?: S[number];
+export const useStack = ({elements, options}: IUseStack): {
+    StackComponent: () => JSX.Element;
+    onPush: (element: StackElementType) => void;
+    onPop: () => void;
+    onReplace: (element: StackElementType) => void;
+} => {
+    const [stackArray, setStackArray] = useState<StackElementType[]>([]);
 
-        onActivityChange?: (activity: S[number]) => void;
+    useEffect(() => {
+        const initialStack = elements.filter((element) =>
+            element.name === options?.initialRouteName)?.[0] || elements[0];
+
+        onPush(initialStack);
+    }, []);
+
+    const onPush = (element: StackElementType) => {
+        setStackArray((prev: StackElementType[]) => {
+            const temp = prev;
+            temp.push(element);
+
+            return temp;
+        })
     }
-): [
-        StackComponent<S>,
-        (activity: S[number]) => void,
-    ] => {
-    const StackComponent = (props: StackProps<S>) => {
-        const initial = options?.initialActivity ?? activities[0];
 
-        return Object.assign(
-            (props: StackProps<S>) => <Stack activities={activities} currentActivity={initial} {...props} />,
-            {
-                Step
-            }
+    const onPop = () => {
+        setStackArray((prev: StackElementType[]) => {
+            const temp = prev;
+            temp.pop();
+
+            return temp;
+        })
+    }
+
+    const onReplace = (element: StackElementType) => {
+        setStackArray((prev: StackElementType[]) => {
+            const filterd = prev.filter((prevElement) => prevElement.name !== element.name);
+            return filterd
+        })
+
+    }
+
+    const StackComponent = () => {
+        return(
+            <Stack elements={elements} currentElement={stackArray[0]}/>
         )
     }
 
-    const onActivityChange = (activity: S[number]) => {
-        options?.onActivityChange?.(activity);
-    }
-
-    return [
+    return {
         StackComponent,
-        onActivityChange
-    ] as any;
+        onPush,
+        onPop,
+        onReplace
+    }
 }

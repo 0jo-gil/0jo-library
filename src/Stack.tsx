@@ -1,43 +1,29 @@
-import { Children, ReactElement, ReactNode, isValidElement } from "react";
 
-export type NonEmptyArray<T> = readonly [T, ...T[]];
-
-interface IStackProps<S extends NonEmptyArray<string>> {
-    activities: S;
-    currentActivity: S[number];
-    children: Array<ReactElement<IActivityProps<S>>> | ReactElement<IActivityProps<S>>;
+export type StackElementType = {
+    name: string;
+    component: JSX.Element;
 }
 
-export interface IActivityProps<S extends NonEmptyArray<string>> {
-    name: S[number];
-    children: ReactNode;
+interface IStack {
+    elements: StackElementType[];
+    currentElement: StackElementType;
 }
 
 
-export const Stack = <S extends NonEmptyArray<string>>({
-    activities,
-    currentActivity,
-    children
-}: IStackProps<S>) => {
+//https://velog.io/@catca/npm-%EB%B0%B0%ED%8F%AC%EB%A5%BC-%EC%9C%84%ED%95%9C-%EB%B3%B4%EC%9D%BC%EB%9F%AC%ED%94%8C%EB%A0%88%EC%9D%B4%ED%8A%B8
+//https://blog.itcode.dev/projects/2022/06/10/react-components-library-starter
 
-    const validChildren = Children.toArray(children)
-        .filter(i => isValidElement(i) && activities.includes((i.props as Partial<IActivityProps<S>>).name ?? '')) as Array<
-            ReactElement<IActivityProps<S>>
-        >;
+//https://velog.io/@catca/npm-%EB%B0%B0%ED%8F%AC%EB%A5%BC-%EC%9C%84%ED%95%9C-%EB%B3%B4%EC%9D%BC%EB%9F%AC%ED%94%8C%EB%A0%88%EC%9D%B4%ED%8A%B8
 
-    const currentChildren = validChildren.find(child => (child.props as IActivityProps<S>).name === currentActivity);
+export const Stack = ({elements, currentElement}: IStack) => {
 
     return (
         <div>
-            {currentChildren}
+            {elements.map((element, index) => (
+
+                <div key={index}>{element.component}</div>
+            ))}
         </div>
     )
 }
 
-export const Step = <S extends NonEmptyArray<string>>({
-    children
-}: IActivityProps<S>) => {
-    return (
-        <>{children}</>
-    )
-}

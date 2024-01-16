@@ -18,10 +18,11 @@
     "removeComments": true
   },
   "include": [
-    "./src",
+    "src/**/*",
     "**/*.tsx"
   ],
   "exclude": [
+    "node_modules",
     "**/dist/*",
     "**/esm/*",
     "**/__testfixtures__/*"

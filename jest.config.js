@@ -12,7 +12,7 @@ module.exports = {
   },
   coverageDirectory: 'coverage',
   moduleDirectories: ['node_modules', 'src'],
-  // setupFilesAfterEnv: ['<rootDir>/src/test/setupTests.ts'],
+  setupFilesAfterEnv: ['<rootDir>/src/test/setupTests.ts'],
   modulePaths: ['<rootDir>'],
   roots: [SRC_PATH],
   transform: {
