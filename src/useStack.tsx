@@ -1,5 +1,5 @@
-import {Stack, StackElementType} from "./Stack";
-import {useEffect, useState} from "react";
+import { Stack, StackElementType } from "./Stack";
+import { useEffect, useState } from "react";
 
 interface IUseStack {
     elements: StackElementType[];
@@ -9,7 +9,7 @@ interface IUseStack {
     }
 }
 
-export const useStack = ({elements, options}: IUseStack): {
+export const useStack = ({ elements, options }: IUseStack): {
     StackComponent: () => JSX.Element;
     onPush: (element: StackElementType) => void;
     onPop: () => void;
@@ -26,21 +26,16 @@ export const useStack = ({elements, options}: IUseStack): {
 
     const onPush = (element: StackElementType) => {
         setStackArray((prev: StackElementType[]) => {
-            const temp = prev;
-            temp.push(element);
-
-            return temp;
-        })
+            return [...prev, element];
+        });
     }
 
     const onPop = () => {
         setStackArray((prev: StackElementType[]) => {
-            const temp = prev;
-            temp.pop();
-
-            return temp;
-        })
+            return prev.slice(0, -1);
+        });
     }
+
 
     const onReplace = (element: StackElementType) => {
         setStackArray((prev: StackElementType[]) => {
@@ -51,8 +46,8 @@ export const useStack = ({elements, options}: IUseStack): {
     }
 
     const StackComponent = () => {
-        return(
-            <Stack elements={elements} currentElement={stackArray[0]}/>
+        return (
+            <Stack elements={stackArray} currentElement={stackArray[0]} />
         )
     }
 
