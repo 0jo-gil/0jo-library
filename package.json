@@ -8,7 +8,7 @@
   "scripts": {
     "start": "npm run exam & npm run watch",
     "build": "rollup -c --bundleConfigAsCjs",
-    "watch": "rollup -cw",
+    "watch": "rollup -cw --bundleConfigAsCjs",
     "exam": "cd example && npm start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "test": "jest",

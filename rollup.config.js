@@ -25,9 +25,9 @@ export default [
       },
     ],
     plugins: [
-      peerDepsExternal(), 
-      resolve(), 
-      commonjs(), 
+      peerDepsExternal(),
+      resolve(),
+      commonjs(),
       postcss({
         extract: true,
         extract: 'index.css',
@@ -37,7 +37,7 @@ export default [
   },
   {
     input: 'src/index.ts',
-    output: [{ file: 'dist/index.d.ts', format: 'cjs' }],
+    output: [{ file: 'dist/index.ts', format: 'cjs' }],
 
     plugins: [
       dts,
@@ -48,6 +48,7 @@ export default [
         extract: true,
         extract: 'index.css',
       }),
+      typescript()
     ],
   },
 ];

@@ -1,1 +1,1 @@
-export * from 'src/useStack';
+export * from './useStack';
