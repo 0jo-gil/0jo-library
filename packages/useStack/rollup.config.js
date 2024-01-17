@@ -3,11 +3,13 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
 import alias from '@rollup/plugin-alias';
+import babel from '@rollup/plugin-babel';
 import postcss from 'rollup-plugin-postcss';
 import dts from 'rollup-plugin-dts';
 
 import path from 'path';
 const packageJson = require('./package.json');
+const extensions = ['js', 'jsx', 'ts', 'tsx'];
 
 export default [
   {
@@ -25,32 +27,42 @@ export default [
       },
     ],
     plugins: [
-      peerDepsExternal(),
-      resolve(),
-      commonjs(),
-      postcss({
-        extract: true,
-        extract: 'index.css',
-      }),
-      typescript()
-    ],
-  },
-  {
-    input: 'src/index.ts',
-    output: [{ file: 'dist/index.ts', format: 'cjs' }],
-
-    plugins: [
       dts,
-      alias({
-        entries: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
+      peerDepsExternal(),
+      resolve({extensions}),
+      babel({
+        extensions,
+        include: ['packages/src/**/*'],
+        exclude: /node_modules/,
+        babelHelpers: 'runtime',
+      }),
+      commonjs({
+        include: /node_modules/,
       }),
       postcss({
         extract: true,
         extract: 'index.css',
       }),
-      typescript(),
-      resolve(),
-
+      typescript({
+       
+      })
     ],
+    external: ['react', 'react-dom', 'styled-components']
   },
+  // {
+  //   input: 'src/index.ts',
+  //   output: [{ file: 'dist/index.ts', format: 'cjs' }],
+
+  //   plugins: [
+  //     dts,
+  //     alias({
+  //       entries: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
+  //     }),
+  //     postcss({
+  //       extract: true,
+  //       extract: 'index.css',
+  //     }),
+  //     typescript()
+  //   ],
+  // },
 ];
