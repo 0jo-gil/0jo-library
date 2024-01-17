@@ -19,12 +19,25 @@ export const useStack = ({ elements, options }: IUseStack): {
     const [isEnter, setIsEnter] = useState<boolean>(false);
     const [isOut, setIsOut] = useState<boolean>(false);
 
-    // useEffect(() => {
-    //     const initialStack = elements.filter((element) =>
-    //         element.name === options?.initialRouteName)?.[0] || elements[0];
+    useEffect(() => {
+        if(!options?.initialRouteName) {
+            onPush(elements[0])
+            return;
+        }
 
-    //     onPush(initialStack);
-    // }, []);
+        const initialStack = elements.findIndex((element) => {
+            return element.name === options?.initialRouteName;
+        })
+
+        if(initialStack === -1) {
+            onPush(elements[0]);
+        } else {
+            for(let i = 0; i < initialStack; i++) {
+                onPush(elements[i]);
+            }
+        }
+
+    }, []);
 
     const onPush = (element: StackElementType) => {
         setStackArray((prev: StackElementType[]) => {
@@ -45,14 +58,13 @@ export const useStack = ({ elements, options }: IUseStack): {
         setIsOut(true);
         setTimeout(() => {
             setIsOut(false);
+            setStackArray((prev: StackElementType[]) => {
+                return prev.slice(0, -1);
+            });
         }, options?.duration ?? 500);
     }
 
     const onPop = () => {
-        setStackArray((prev: StackElementType[]) => {
-            return prev.slice(0, -1);
-        });
-
         initIsOut();
     }
 
@@ -66,7 +78,7 @@ export const useStack = ({ elements, options }: IUseStack): {
 
     const StackComponent = () => {
         return (
-            <Stack elements={stackArray} currentElement={stackArray[0]} isEnter={isEnter} isOut={isOut} />
+            <Stack elements={stackArray} currentIndex={stackArray.length - 1} isEnter={isEnter} isOut={isOut} />
         )
     }
 

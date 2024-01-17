@@ -8,7 +8,7 @@ export type StackElementType = {
 
 interface IStack {
     elements: StackElementType[];
-    currentElement: StackElementType;
+    currentIndex: number;
     isEnter?: boolean;
     isOut?: boolean;
 }
@@ -17,12 +17,22 @@ interface IStack {
 //https://blog.itcode.dev/projects/2022/06/10/react-components-library-starter
 //https://velog.io/@catca/npm-%EB%B0%B0%ED%8F%AC%EB%A5%BC-%EC%9C%84%ED%95%9C-%EB%B3%B4%EC%9D%BC%EB%9F%AC%ED%94%8C%EB%A0%88%EC%9D%B4%ED%8A%B8
 
-export const Stack = ({ elements, currentElement, isEnter, isOut }: IStack) => {
+export const Stack = ({ elements, currentIndex, isEnter, isOut }: IStack) => {
 
     return (
         <StackContainer>
             {elements.map((element, index) => (
-                <StStack key={index} isEnter={isEnter} isOut={isOut}>{element.component}</StStack>
+                <StStack 
+                    key={index} 
+                    className={
+                        isEnter && index === currentIndex ? 'enter' :
+                        isOut && index === currentIndex ? 'out' : ''
+                    }
+                    isEnter={isEnter && index === currentIndex} 
+                    isOut={isOut && index === currentIndex}
+                >
+                    {element.component}
+                </StStack>
             ))}
         </StackContainer>
     )
@@ -41,6 +51,7 @@ const StStackContianer = styled.div`
     height: 100%;
 `;
 
+
 const slideIn = keyframes`
   0% {
     transform: translateX(100%);
@@ -50,21 +61,31 @@ const slideIn = keyframes`
   }
 `;
 
-// const slideOut = keyframes`
-//   0% {
-//     transform: translateX(0);
-//   }
-//   100% {
-//     transform: translateX(100%);
-//   }
-// `;
-
+const slideOut = keyframes`
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+`;
 
 const StStack = styled.div<Pick<IStack, 'isEnter' | 'isOut'>>`
     width: 100%;
     height: 100%;
-  transform: ${props => props.isEnter ? 'translateX(100%)' : 'translateX(0)'};
-  transition: 0.5s;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #242424;
+  
+
+    &.enter {
+        animation: ${slideIn} 0.5s ease-in-out;
+    }
+
+    &.out {
+        animation: ${slideOut} 0.5s ease-in-out;
+    }
 `;
-    // animation: ${props => props.isEnter && css`${slideIn} 1s forwards` ? props.isOut && css`${slideOut} 1s forwards` : ''};
+
 
