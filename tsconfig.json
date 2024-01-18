@@ -17,10 +17,14 @@
     "emitDeclarationOnly": true,
     "removeComments": true
   },
+  "paths": {
+    "@/*": ["packages/*"]
+  },
   "include": [
     "src/**/*",
-    "**/*.tsx"
-, "packages"  ],
+    "**/*.tsx",
+    "packages"
+  ],
   "exclude": [
     "node_modules",
     "**/dist/*",

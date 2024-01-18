@@ -1,0 +1,27 @@
+{
+    "testEnvironment": "jsdom",
+    "moduleFileExtensions": [
+        "js",
+        "jsx"
+    ],
+    "roots": [
+        "src"
+    ],
+    "moduleNameMapper": {
+        "src/(.*)": "<rootDir>/src/$1",
+        "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+        "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+    },
+    "setupFilesAfterEnv": [
+        "<rootDir>/src/setupTests.js"
+    ],
+    "transform": {
+        "\\.js$": "<rootDir>/node_modules/babel-jest",
+        "\\.jsx$": "<rootDir>/node_modules/babel-jest"
+    },
+    "plugins": [
+        // https://yoon-dumbo.tistory.com/entry/%F0%9F%A4%A9-rollup-typescript-react-%EC%85%8B%ED%8C%85%ED%95%98%EA%B8%B0 -> styled compoenents 빌드 오류 설정
+        // 해당 의존성 설치 추가 필요
+        "babel-plugin-styled-components"
+    ]
+}

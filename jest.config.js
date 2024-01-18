@@ -1,4 +1,4 @@
-const SRC_PATH = '<rootDir>/src';
+const SRC_PATH = '<rootDir>/packages';
 
 module.exports = {
   preset: 'ts-jest',
@@ -12,19 +12,16 @@ module.exports = {
   },
   coverageDirectory: 'coverage',
   moduleDirectories: ['node_modules', 'src'],
-  setupFilesAfterEnv: ['<rootDir>/src/test/setupTests.ts'],
+  // setupFilesAfterEnv: ['<rootDir>/src/test/setupTests.ts'],
   modulePaths: ['<rootDir>'],
   roots: [SRC_PATH],
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
   },
-  moduleNameMapper: {
-    '^@src(.*)$': '<rootDir>/src$1',
-    '^@components(.*)$': '<rootDir>/src/components$1',
-    '^@style(.*)$': '<rootDir>/src/style$1',
-    '^@hooks(.*)$': '<rootDir>/src/hooks$1',
-    '^@utils(.*)$': '<rootDir>/src/utils$1',
-    '\\.(css|scss)$': '<rootDir>/mocks/styleMock.js',
-  },
-  testEnvironment: 'jsdom'
+
+  testEnvironment: 'jsdom',
+  collectCoverageFrom: [
+    "packages/*/src/**/*.ts",
+  ],
+  testEnvironment: 'node',
 };

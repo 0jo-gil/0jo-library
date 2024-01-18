@@ -87,6 +87,5 @@ export const useStack = ({ elements, options }: IUseStack): {
         onPush,
         onPop,
         onReplace,
-       
     }
 }
