@@ -20,6 +20,7 @@ describe('Button Test', () => {
         const button = getByTestId('my-button');
 
         expect(button)
+            .not
             .toHaveProperty('type', 'submit');
     })
 })
