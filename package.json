@@ -11,7 +11,7 @@
     "watch": "rollup -cw --bundleConfigAsCjs",
     "exam": "cd example && npm start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "test": "jest",
+    "test": "jest --env=jsdom",
     "corverage": "jest --coverage"
   },
   "author": "0jo-gil",
@@ -39,6 +39,7 @@
     "enzyme": "^3.11.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "jsdom": "^23.2.0",
     "node-sass": "^9.0.0",
     "postcss": "^8.4.33",
     "postcss-loader": "^7.3.4",

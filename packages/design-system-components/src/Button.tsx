@@ -7,8 +7,8 @@ interface ButtonProps<T extends ElementType = 'button' | 'div' | 'a' | 'span'> {
     onClick?: () => void;
     type?: ButtonHTMLAttributes<T>['type'];
 }
-
-export const Button = (props: ButtonProps, ref: ForwardedRef<HTMLButtonElement>) => {
+// , ref: ForwardedRef<HTMLButtonElement>
+export const Button = (props: ButtonProps) => {
     //  ref 추후 버튼 자체 이벤트를 엮을 경우 추가
     const {buttonProps} = useButton(props);
 
@@ -24,7 +24,7 @@ export const Button = (props: ButtonProps, ref: ForwardedRef<HTMLButtonElement>)
         <button 
             {...buttonProps}
             {...renderProps}
-            ref={ref}
+            // ref={ref}
         />
     )
 }

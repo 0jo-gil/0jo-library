@@ -1,11 +1,16 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import {Button} from './Button';
 import {render} from '@testing-library/react';
 
 describe('Button Test', () => {
     it('Button Type Check', () => {
+        
         const {getByTestId} = render(
             <Button
-                elementName='div'
+                elementName='button'
                 type='button'
                 isDisabled={false}
                 data-testid="my-button"
@@ -14,6 +19,7 @@ describe('Button Test', () => {
 
         const button = getByTestId('my-button');
 
-        expect(button).toHaveReturnedWith(expect.any(HTMLAnchorElement));
+        expect(button)
+            .toHaveProperty('type', 'submit');
     })
 })
