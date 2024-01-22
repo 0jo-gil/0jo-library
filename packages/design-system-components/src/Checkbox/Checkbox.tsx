@@ -6,7 +6,7 @@ type Props = {
     children?: ReactElement | ReactNode | string;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-export const Checkbox = React.forwardRef((
+const Checkbox =(
     {
         onChange, children, ...props
     }: Props, 
@@ -28,4 +28,6 @@ export const Checkbox = React.forwardRef((
             </label>
         </div>
     )
-})
+}
+
+export const ForwardedCheckbox = React.forwardRef(Checkbox);
