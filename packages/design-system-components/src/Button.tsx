@@ -1,56 +1,28 @@
-import React, { ButtonHTMLAttributes, ElementType, ForwardedRef } from "react";
-import { useButton } from "./useButton";
+import React, { ButtonHTMLAttributes, ElementType, forwardRef, ReactNode } from 'react';
 
-// interface ButtonProps<T extends ElementType = 'button' | 'div' | 'a' | 'span'> {
-//     elementName?: T;
-//     isDisabled?: boolean;
-//     onClick?: () => void;
-//     type?: ButtonHTMLAttributes<T>['type'];
-// }
-// // , ref: ForwardedRef<HTMLButtonElement>
-// export const Button = (props: ButtonProps) => {
-//     //  ref 추후 버튼 자체 이벤트를 엮을 경우 추가
-//     const {buttonProps} = useButton(props);
+type As = 'button' | 'div' | 'a' | 'span';
 
-//     const renderProps = {
-//         ...props,
-//         state: {
-//             isDisabled: props.isDisabled || false,
-//         },
-//         defaultClass: 'design-system-button'
-//     }
+type ComponentProps = {
+  button: ButtonHTMLAttributes<HTMLButtonElement>;
+  div: React.HTMLAttributes<HTMLDivElement>;
+  a: React.AnchorHTMLAttributes<HTMLAnchorElement>;
+  span: React.HTMLAttributes<HTMLSpanElement>;
+};
 
-//     return (
-//         <button 
-//             {...buttonProps}
-//             {...renderProps}
-//             // ref={ref}
-//         />
-//     )
-// }
+export type ButtonProps<T extends As = As> = {
+  as?: T;
+  variant?: 'primary' | 'secondary';
+  size?: 'small' | 'medium' | 'large';
+  children: ReactNode | React.ReactElement;
+} & ComponentProps[T];
 
+const Button = <T extends As = As>(
+{ variant = 'primary', as = 'button' as T, size = 'medium', children, ...props }: ButtonProps<T>,
+  ref: React.ForwardedRef<any>
+) => {
+  const Component: React.ElementType = as || 'button';
 
+  return React.createElement(Component, { ...props, ref }, children);
+};
 
-export interface ButtonProps<T extends ElementType = 'button' | 'div' | 'a' | 'span'> {
-    as: T;
-    variant?: 'primary' | 'secondary';
-    size: 'small' | 'medium' | 'large';
-    children: React.ReactNode | React.ReactElement | string;
-}
-
-
-export const Button = React.forwardRef(
-    ({as, variant, size, children, ...props}: ButtonProps, ref: ForwardedRef<T extends ElementType ? T : 'button'>) => {
-
-        const AsComponent = as || 'button';
-
-        return (
-            <AsComponent
-                ref={ref}
-                {...props}
-            >
-                {children}
-            </AsComponent>
-        )
-    }
-)
+export const ForwardedButton = forwardRef(Button);

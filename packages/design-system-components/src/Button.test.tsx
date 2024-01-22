@@ -2,19 +2,18 @@
  * @jest-environment jsdom
  */
 
-import {Button} from './Button';
+import React from 'react';
+import {ForwardedButton} from './Button';
 import {render} from '@testing-library/react';
 
 describe('Button Test', () => {
     it('Button Type Check', () => {
-        
         const {getByTestId} = render(
-            <Button
-                elementName='button'
+            <ForwardedButton
+                as='button'
                 type='button'
-                isDisabled={false}
                 data-testid="my-button"
-            />
+            >?</ForwardedButton>
         )
 
         const button = getByTestId('my-button');
@@ -22,6 +21,17 @@ describe('Button Test', () => {
         expect(button)
             .not
             .toHaveProperty('type', 'submit');
+    })
+
+    it('Button Element Name Check', () => {
+        render(
+            <ForwardedButton
+                data-testid="my-button"
+                as='span'
+            >button</ForwardedButton>
+        )
+
+        expect(document.body.querySelectorAll('span')).toHaveLength(1);
     })
 
     
