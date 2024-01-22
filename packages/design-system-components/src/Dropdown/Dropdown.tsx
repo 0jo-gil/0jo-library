@@ -37,7 +37,7 @@ const reducer: Reducer<State, Action> = (state, action) => {
     }
 };
 
-export const DropdownProvider: React.FC = ({ children }: PropsWithChildren) => {
+export const DropdownProvider = ({ children }: PropsWithChildren) => {
     const [state, dispatch] = useReducer(reducer, { value: '', isOpen: false, disabled: false });
 
     return (
@@ -74,7 +74,7 @@ export const useDropdownState = () => {
 };
 
 const Dropdown = ({ children }: PropsWithChildren) => {
-    return <div>{children}</div>;
+    return <DropdownProvider>{children}</DropdownProvider>;
 };
 
 Dropdown.Trigger = ({ children }: PropsWithChildren) => {
