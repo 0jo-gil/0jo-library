@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ForwardedRef } from "react";
 import { InputHTMLAttributes, ReactElement, ReactNode, Ref, useId } from "react"
 
 type Props = {
@@ -10,7 +10,7 @@ const Checkbox =(
     {
         onChange, children, ...props
     }: Props, 
-    ref: Ref<HTMLInputElement>
+    ref: React.ForwardedRef<HTMLInputElement>
 ) => {
     const id = props.id ? `0jo__ui-checkbox-${props.id}` : useId(); 
 
