@@ -2,7 +2,6 @@
  * @jest-environment jsdom
  */
 
-import React from 'react';
 import {ForwardedButton} from './Button';
 import {render} from '@testing-library/react';
 
@@ -30,9 +29,6 @@ describe('Button Test', () => {
                 as='span'
             >button</ForwardedButton>
         )
-
         expect(document.body.querySelectorAll('span')).toHaveLength(1);
     })
-
-    
 })

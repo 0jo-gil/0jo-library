@@ -1,8 +1,6 @@
 import { render } from "@testing-library/react"
 import { Input } from "./Input"
 
-
-
 describe('Input Test', () => { 
     it('should render the input correctly', () => {
         render(<Input name='name' label="name" />)
