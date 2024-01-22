@@ -1,63 +1,115 @@
-import { createContext, useContext, useReducer } from "react";
+import React, { createContext, useReducer, useContext, Reducer, PropsWithChildren } from 'react';
 
-type Action = {type: 'OPEN'} | {type: 'CLOSE'} | {type: 'SELECT', id: string} | {type: 'CHANGE', value: unknown};
-type State = {value: unknown; isOpen: boolean; disabled: boolean};
-
-const dropdownActionContext = createContext<{
-    onOpen(): void;
-    onClose(): void;
-    onChange(value: unknown): void;
-    onSelect(id: string): void;
-} | null>(null);
-
-const reducer = (state: State, action: Action): State => {
-    switch (action.type) {
-        case 'OPEN':
-            return { ...state, isOpen: true };
-        case 'CLOSE':
-            return { ...state, isOpen: false };
-        case 'SELECT':
-            return { ...state, value: action.id };
-        case 'CHANGE':
-            return { ...state, value: action.value };
-        default:
-            throw new Error(`Unhandled action type: ${action.type}`);
-    }
+enum ActionTypes {
+    OPEN = 'OPEN',
+    CLOSE = 'CLOSE',
+    SELECT = 'SELECT',
+    CHANGE = 'CHANGE',
 }
 
-const useDropboxAction = () => {
-    const context = useContext(dropdownActionContext);
-    if (!context) {
-        throw new Error("useDropbox must be used within a DropboxProvider");
-    }
-
-    return context;
-}
-
-const dropdownStateContext = createContext<{
+type State = {
     value: unknown;
     isOpen: boolean;
     disabled: boolean;
-} | null>(null);
+};
 
+type Action<T = unknown> = {
+    type: ActionTypes;
+    value?: T;
+    id?: string;
+};
 
-const useDropboxState = () => {
-    const context = useContext(dropdownStateContext);
-    if(!context) {
-        throw new Error("useDropbox must be used within a DropboxProvider");
+const dropdownActionContext = createContext<React.Dispatch<Action> | undefined>(undefined);
+const dropdownStateContext = createContext<State | undefined>(undefined);
+
+const reducer: Reducer<State, Action> = (state, action) => {
+    switch (action.type) {
+        case ActionTypes.OPEN:
+            return { ...state, isOpen: true };
+        case ActionTypes.CLOSE:
+            return { ...state, isOpen: false };
+        case ActionTypes.SELECT:
+            return { ...state, value: action.id };
+        case ActionTypes.CHANGE:
+            return { ...state, value: action.value };
+        default:
+            return state;
     }
+};
 
-    return context
-}
+export const DropdownProvider: React.FC = ({ children }: PropsWithChildren) => {
+    const [state, dispatch] = useReducer(reducer, { value: '', isOpen: false, disabled: false });
 
-const Dropdownbox = () => {
+    return (
+        <dropdownActionContext.Provider value={dispatch}>
+            <dropdownStateContext.Provider value={state}>
+                {children}
+            </dropdownStateContext.Provider>
+        </dropdownActionContext.Provider>
+    );
+};
 
-}
+export const useDropdownAction = () => {
+    const context = useContext(dropdownActionContext);
+    if (!context) {
+        throw new Error("useDropdownAction must be used within a DropdownProvider");
+    }
+    return context;
+};
 
+export const useDropdownDispatch = () => {
+    const context = useContext(dropdownActionContext);
+    if (!context) {
+        throw new Error("useDropdownDispatch must be used within a DropdownProvider");
+    }
+    return context;
+};
 
-const reducer = () => {
+export const useDropdownState = () => {
+    const context = useContext(dropdownStateContext);
+    if (!context) {
+        throw new Error("useDropdownState must be used within a DropdownProvider");
+    }
+    return context;
+};
 
-}
+const Dropdown = ({ children }: PropsWithChildren) => {
+    return <div>{children}</div>;
+};
 
-const [state, dispatch] = useReducer()
+Dropdown.Trigger = ({ children }: PropsWithChildren) => {
+    const { isOpen } = useDropdownState();
+    const dispatch = useDropdownDispatch();
 
+    const handleClick = () => {
+        dispatch({ type: isOpen ? ActionTypes.CLOSE : ActionTypes.OPEN });
+    };
+
+    return <button onClick={handleClick}>{children}</button>;
+};
+
+Dropdown.Item = ({ children, value }: {
+    children: React.ReactNode;
+    value: string;
+}) => {
+    const { value: selectedValue } = useDropdownState();
+    const dispatch = useDropdownDispatch();
+
+    const handleClick = () => {
+        dispatch({ type: ActionTypes.SELECT, id: value });
+    };
+
+    return (
+        <div onClick={handleClick} style={{ backgroundColor: selectedValue === value ? 'gray' : 'white' }}>
+            {children}
+        </div>
+    );
+};
+
+Dropdown.Menu = ({ children }: PropsWithChildren) => {
+    const { isOpen } = useDropdownState();
+
+    return isOpen ? <div>{children}</div> : null;
+};
+
+export default Dropdown;
