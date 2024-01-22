@@ -1,5 +1,5 @@
 import { fireEvent, render } from "@testing-library/react"
-import Dropdown, { DropdownProvider, useDropdownState } from "./Dropdown"
+import Dropdown, { useDropdownState } from "./Dropdown"
 
 describe('Dropdown Test', () => {
 
