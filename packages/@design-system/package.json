@@ -1,5 +1,5 @@
 {
-  "name": "@0jo-gil/design-system",
+  "name": "@0jo-gil/design",
   "version": "1.0.0",
   "scripts": {
     "build": "rm -rf dist && npm run build:typings && INPUT_FILE=./index.ts rollup -c ../../rollup.config.js"
