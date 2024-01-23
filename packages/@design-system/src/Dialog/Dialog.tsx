@@ -1,4 +1,5 @@
-import { Reducer, createContext, useContext } from "react";
+import { PropsWithChildren, Reducer, createContext, useContext, useReducer } from "react";
+import { Portal } from "../Portal/Portal";
 
 
 enum StateTypes {
@@ -43,6 +44,14 @@ const useDialogContext = () => {
 
 
 
-export const Dialog = () => {
-    return <div>Dialog</div>
+export const Dialog = ({children}: PropsWithChildren) => {
+    const [state, dispatch] = useReducer(reducer, { state: StateTypes.Closed, id: ''});
+    
+    return ( 
+        <DialogContext.Provider value={dispatch}>
+            <Portal>
+               {children}
+            </Portal>
+        </DialogContext.Provider>
+    )
 }
