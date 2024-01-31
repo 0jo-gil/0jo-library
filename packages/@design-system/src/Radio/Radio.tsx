@@ -1,33 +1,38 @@
-import React, { Ref, useId } from "react";
+import { forwardRef, useId } from "react";
+import styled from "styled-components";
 
-type Props = {
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    children?: React.ReactElement | React.ReactNode | string;
-} & React.InputHTMLAttributes<HTMLInputElement>;
 
-const Radio = (
-    {
-        onChange, children, ...props
-    }: Props,
-    ref: React.ForwardedRef<HTMLInputElement>
-) => {
-    const id = props.id ? `0jo__ui-radio-${props.id}` : useId();
-
-    return (
-        <div>
-            <input 
-                id={id}
-                type='radio'
-                ref={ref}
-                onChange={onChange}
-                {...props}
-            />
-            <label id={id}>
-                <div>{children}</div>
-            </label>
-        </div>
-    )
+type ComponentProps = {
+    input: React.InputHTMLAttributes<HTMLInputElement>;
 }
 
+export type RadioProps = {
+    variant?: 'primary' | 'secondary';
+    size?: 'small' | 'medium' | 'large';
+    label?: string;
+    id?: string;
+    children: React.ReactNode | React.ReactElement | string;
+} & ComponentProps['input'];
 
-export const ForwardedRadio = React.forwardRef(Radio);
+export const Radio = forwardRef<HTMLInputElement, RadioProps>(({
+    variant = 'primary',
+    size,
+    label,
+    id,
+    children,
+    ...props
+}, ref) => {
+    const radioId = `0jo-radio-${id}` || useId();
+
+    return (
+        <label htmlFor={radioId}>
+            <StHiddenRadio ref={ref} {...props} id={radioId} />
+            <StRadio checked={props.checked || false} />
+            {children}
+        </label>
+    )
+})
+
+const StHiddenRadio = styled.input.attrs({ type: 'radio' })``;
+
+const StRadio = styled.div<{ checked: boolean }>``;

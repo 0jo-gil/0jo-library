@@ -17,9 +17,11 @@ export type ButtonProps<T extends As = As> = {
 } & ComponentProps[T];
 
 const Button = <T extends As = As>(
-{ variant = 'primary', as = 'button' as T, size = 'medium', children, ...props }: ButtonProps<T>,
+  { variant = 'primary', as = 'button' as T, size = 'medium', children, ...props }: ButtonProps<T>,
   ref: React.ForwardedRef<any>
 ) => {
+
+
   const Component: React.ElementType = as || 'button';
 
   return React.createElement(Component, { ...props, ref }, children);

@@ -1,37 +1,35 @@
-import { PropsWithChildren, useState } from 'react'
-import { createPortal } from 'react-dom'
+import { ReactNode, useEffect, useState } from "react"
+import ReactDOM from "react-dom";
 
-const usePortal = () => {
-    const [isPortalMounted, setIsPortalMounted] = useState(() => {
-        if(typeof window === 'undefined') {
-            return null
-        }
-
-        if(!document) {
-            return null
-        }
-
-        const isTargetMounted = document?.getElementById('0jo-portal-root')
-
-        if(isTargetMounted) return isTargetMounted
-
-        const portalRoot = document.createElement('div')
-        portalRoot.setAttribute('id', '0jo-portal-root')
-
-        return document.body.appendChild(portalRoot)
-    })
-
-    return isPortalMounted;
+type PortalProps = {
+    children: React.ReactNode;
+    containerId?: string;
 }
 
-export const Portal = ({children}: PropsWithChildren) => {
+export const Portal: React.FC<PortalProps> = ({
+    children,
+    containerId = '0jo-portal'
+}) => {
+    const [container, setContainer] = useState<HTMLElement | null>(null);
 
-    const target = usePortal();
+    useEffect(() => {
+        let element = document.getElementById(containerId);
 
-    if(!target) return null
+        if (element) return;
 
-    return createPortal(
-        <>{children}</>,
-        target
-    )
+        element = document.createElement('div');
+        element.setAttribute('id', containerId);
+
+        document.body.appendChild(element);
+
+        setContainer(element);
+
+        return () => {
+            if (element) {
+                document.body.removeChild(element);
+            }
+        }
+    }, [containerId])
+
+    return container ? ReactDOM.createPortal(children, container) : null;
 }

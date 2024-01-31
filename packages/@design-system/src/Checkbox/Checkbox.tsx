@@ -1,33 +1,44 @@
-import React, { ForwardedRef } from "react";
-import { InputHTMLAttributes, ReactElement, ReactNode, Ref, useId } from "react"
+import { HTMLAttributes, forwardRef } from "react";
+import styled from "styled-components";
 
-type Props = {
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    children?: ReactElement | ReactNode | string;
-} & InputHTMLAttributes<HTMLInputElement>;
-
-const Checkbox =(
-    {
-        onChange, children, ...props
-    }: Props, 
-    ref: React.ForwardedRef<HTMLInputElement>
-) => {
-    const id = props.id ? `0jo__ui-checkbox-${props.id}` : useId(); 
-
-    return (
-        <div>
-            <input 
-                id={id}
-                type='checkbox'
-                ref={ref}
-                onChange={onChange}
-                {...props}
-            />
-            <label id={id}>
-                <div>{children}</div>
-            </label>
-        </div>
-    )
+type ComponentProps = {
+    input: React.InputHTMLAttributes<HTMLInputElement>;
 }
 
-export const ForwardedCheckbox = React.forwardRef(Checkbox);
+export type CheckboxProps = {
+    variant?: 'primary' | 'secondary';
+    size?: 'small' | 'medium' | 'large';
+    label?: string;
+    children: React.ReactNode | React.ReactElement | string;
+} & ComponentProps['input'];
+
+
+export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(({
+    variant = 'primary',
+    size,
+    label,
+    children,
+    ...props
+}, ref) => {
+    return (
+        <label>
+            <StHiddenCheckbox ref={ref} {...props} />
+            <StCheckbox checked={props.checked || false} />
+            {children}
+        </label>
+    )
+})
+
+const StHiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
+    display: none;
+`
+
+const StCheckbox = styled.div<{ checked: boolean }>`
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: ${({ checked }: { checked: boolean }) => checked ? 'blue' : 'white'};
+    border-radius: 3px;
+    transition: all 150ms;
+    border: 1px solid #ddd;
+`
